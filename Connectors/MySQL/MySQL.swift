@@ -561,11 +561,33 @@ public final class MySQLStmt {
 		return true
     }
     
+    public func bindParam(d: Float) -> Bool {
+        self.paramBinds[self.paramBindsOffset].buffer_type = MYSQL_TYPE_FLOAT
+        self.paramBinds[self.paramBindsOffset].buffer_length = UInt(sizeof(Float))
+        let a = UnsafeMutablePointer<Float>.alloc(1)
+        a.initialize(d)
+        self.paramBinds[self.paramBindsOffset].buffer = UnsafeMutablePointer<()>(a)
+        
+        self.paramBindsOffset += 1
+        return true
+    }
+    
     public func bindParam(i: Int) -> Bool {
         self.paramBinds[self.paramBindsOffset].buffer_type = MYSQL_TYPE_LONGLONG
         self.paramBinds[self.paramBindsOffset].buffer_length = UInt(sizeof(Int64))
         let a = UnsafeMutablePointer<Int64>.alloc(1)
         a.initialize(Int64(i))
+        self.paramBinds[self.paramBindsOffset].buffer = UnsafeMutablePointer<()>(a)
+        
+        self.paramBindsOffset += 1
+        return true
+    }
+    
+    public func bindParam(i: Bool) -> Bool {
+        self.paramBinds[self.paramBindsOffset].buffer_type = MYSQL_TYPE_BIT
+        self.paramBinds[self.paramBindsOffset].buffer_length = UInt(sizeof(Bool))
+        let a = UnsafeMutablePointer<Bool>.alloc(1)
+        a.initialize(Bool(i))
         self.paramBinds[self.paramBindsOffset].buffer = UnsafeMutablePointer<()>(a)
         
         self.paramBindsOffset += 1
